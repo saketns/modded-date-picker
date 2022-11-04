@@ -17,6 +17,7 @@ export default function DateRange(props) {
     <DateRangePicker
       onChange={(item) => setState([item.selection])}
       showSelectionPreview={false}
+      showMonthAndYearPickers={false}
       moveRangeOnFirstSelection={false}
       preventSnapRefocus={true}
       editableDateInputs={true}
@@ -74,36 +75,63 @@ const staticRanges = createStaticRanges([
     range: () => {
       let mtd = moment().date();
       return {
-        startDate: moment().subtract(mtd - 1, "day").startOf("day").toDate(),
+        startDate: moment()
+          .subtract(mtd - 1, "day")
+          .startOf("day")
+          .toDate(),
         endDate: moment().subtract(1, "day").endOf("day").toDate(),
       };
     },
   },
   {
     label: "Last Month",
-    range: () => ({
-      startDate: moment().subtract(1, "month").startOf("day").toDate(),
-      endDate: moment().subtract(1, "day").endOf("day").toDate(),
-    }),
+    range: () => {
+      let mtd = moment().date();
+      let prevMonthStart = moment()
+        .subtract(1, "month")
+        .subtract(mtd - 1, "day")
+        .startOf("day");
+      let prevMonthEnd = moment().subtract(mtd, "day").endOf("day");
+      return {
+        startDate: prevMonthStart.toDate(),
+        endDate: prevMonthEnd.toDate(),
+      };
+    },
   },
   {
     label: "Last 3 Months",
-    range: () => ({
-      startDate: moment().subtract(3, "month").startOf("day").toDate(),
-      endDate: moment().subtract(1, "day").endOf("day").toDate(),
-    }),
+    range: () => {
+      let mtd = moment().date();
+      let prev3MonthStart = moment()
+        .subtract(3, "month")
+        .subtract(mtd - 1, "day")
+        .startOf("day");
+      let prevMonthEnd = moment().subtract(mtd, "day").endOf("day");
+      return {
+        startDate: prev3MonthStart.toDate(),
+        endDate: prevMonthEnd.toDate(),
+      };
+    },
   },
   {
     label: "Last 6 Months",
-    range: () => ({
-      startDate: moment().subtract(6, "month").startOf("day").toDate(),
-      endDate: moment().subtract(1, "day").endOf("day").toDate(),
-    }),
+    range: () => {
+      let mtd = moment().date();
+      let prev6MonthStart = moment()
+        .subtract(6, "month")
+        .subtract(mtd - 1, "day")
+        .startOf("day");
+      let prevMonthEnd = moment().subtract(mtd, "day").endOf("day");
+      return {
+        startDate: prev6MonthStart.toDate(),
+        endDate: prevMonthEnd.toDate(),
+      };
+    },
   },
   {
-    label: "This year (YTD)",
+    label: "This Year (YTD)",
     range: () => ({
-      startDate: moment().startOf('year').toDate(),
+      startDate: moment().startOf("year").toDate(),
       endDate: moment().subtract(1, "day").endOf("day").toDate(),
     }),
   },
